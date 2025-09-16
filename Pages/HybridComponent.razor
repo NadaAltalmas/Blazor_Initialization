@@ -1,0 +1,36 @@
+@page "/hybrid"
+@using System.Data
+
+<h3>Hybrid Component Demo</h3>
+
+@foreach (var item in mockData)
+{
+    <p>@item</p>
+}
+
+@code {
+    private List<string> mockData = new()
+    {
+        "Item 1 - Rendered in Hybrid mode", 
+        "Item 2 - Mock Data", 
+        "Item 3 - Example"
+    };
+
+    [Inject] private ILogger<HybridComponent> Logger {get; set;} = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Logger.LogInformation("HybridComponent initialized at {Time}", DateTime.Now);
+
+        try {
+            await Task.Delay(500);
+            Logger.LogInformation("Mock Data Loaded Successfully. Count: {Count}", mockData.Count);
+        }
+
+        catch (Exception ex)
+        {
+            Logger.LogError(ex," Error occured while initializing HybridComponent");
+        }
+    }
+
+}
